@@ -1,0 +1,144 @@
+.main {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #343d4b;
+}
+.content {
+  background: #222831;
+  width: 100%;
+  max-width: 944px;
+  height: 620px;
+  margin: 10px;
+  border-radius: 25px;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  padding: 50px;
+}
+.content_info {
+  position: absolute;
+  width: 100%;
+  max-width: 500px;
+  height: 666px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -70px;
+  background: linear-gradient(140deg, rgba(136, 235, 239, 0.9) 0%, rgba(83, 91, 230, 0.9) 100%);
+  border-radius: 30px;
+  padding: 48px 32px;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.content_info_top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  h2 {
+    font-weight: 600;
+    font-size: 37px;
+  }
+  p {
+    font-weight: 500;
+    font-size: 22px;
+  }
+}
+.content_info_location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.content_info_bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  h2 {
+    font-weight: 700;
+    font-size: 50px;
+  }
+  p {
+    font-weight: 700;
+    font-size: 30px;
+  }
+}
+.others_info {
+  width: 100%;
+  max-width: 415px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.others_info_top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.others_info_top_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h2 {
+    font-weight: 700;
+    font-size: 28px;
+  }
+  p {
+    font-weight: 400;
+    font-size: 28px;
+  }
+}
+.others_days {
+  display: flex;
+  background: #272e37;
+  border-radius: 10px;
+  justify-content: space-between;
+}
+.others_days_item {
+  box-shadow: 1px 2px 4px 0 #222831;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  padding: 15px 24px;
+  cursor: pointer;
+  transition: 0.1s ease-out;
+  svg {
+    width: 55px;
+    height: 55px;
+  }
+  p {
+    font-weight: 400;
+    font-size: 20px;
+  }
+  h2 {
+    font-weight: 700;
+    font-size: 20px;
+  }
+}
+.others_days_item:hover {
+  background: #fff;
+  color: #000;
+}
+.search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: linear-gradient(180deg, rgba(136, 235, 239, 0.9) 0%, rgba(83, 91, 230, 0.9) 100%);
+  border-radius: 10px;
+}
+.search input {
+  width: 100%;
+  background: transparent;
+  outline: none;
+  border: none;
+  color: #fff;
+}
+.search input::placeholder {
+  color: #fff;
+  font-weight: 500;
+}
