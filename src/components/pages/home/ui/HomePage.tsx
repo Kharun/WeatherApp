@@ -2,27 +2,77 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import styles from "./HomePage.module.css";
 import { WeatherApi } from "../../../../api";
-import { LocationIcon, SearchIcon, SunIcon } from "../../../../assets/icons";
+import { CloudRain, CloudSun, LocationIcon, SearchIcon, SunIcon } from "../../../../assets/icons";
+import type { WeatherDataT } from "../../../../types";
 
 export const HomePage = () => {
   const [search, setSearch] = useState("Бишкек");
   const [debounceQuery] = useDebounce(search, 500);
-  const [data, setData] = useState({
+  const [data, setData] = useState<WeatherDataT>({
     date: {
+      time: "",
       day: "",
-      month: "",
-      year: "",
     },
+    today: {
+      name: "",
+      clouds: {
+        all: "",
+      },
+      wind: {
+        deg: 0,
+        gust: 0,
+        speed: 0,
+      },
+      weather: [
+        {
+          description: "",
+          icon: "",
+          id: 0,
+          main: "",
+        },
+      ],
+      sys: {
+        country: "",
+        id: 0,
+        sunrise: 0,
+        sunset: 0,
+      },
+      main: {
+        temp: "",
+        feels_like: "",
+        temp_max: "",
+        temp_min: "",
+        humidity: "",
+      },
+    },
+    weatherList: [""],
   });
+  const [statuses, setStatuses] = useState({
+    loading: false,
+    error: false,
+  });
+  const today = new Date();
+  const formattedDate = `${today.getDate()} ${today.toLocaleString("ru-RU", { month: "long" })} ${today.getFullYear()}`;
 
   const fetchData = async () => {
     try {
+      setStatuses((prev) => ({ ...prev, loading: true, error: false }));
       const resp = await WeatherApi.getWeather({ q: search });
-      console.log(getDayOfWeek(resp.data.dt));
+      setData((prev) => ({
+        ...prev,
+        today: resp.data,
+        weatherList: resp.data.dt,
+        date: { ...prev.date, day: getDayOfWeek(resp.data.dt) },
+      }));
       const respList = await WeatherApi.getWeatherAll({ q: search });
-      console.log(respList.data.list.filter((item: any) => item.dt_txt.includes("12:00:00")));
+      setData((prev) => ({
+        ...prev,
+        weatherList: respList.data.list.filter((item: any) => item.dt_txt.includes("12:00:00")),
+      }));
+      setStatuses((prev) => ({ ...prev, loading: false }));
     } catch (err) {
       console.error(err);
+      setStatuses((prev) => ({ ...prev, loading: false, error: true }));
     }
   };
 
@@ -31,72 +81,86 @@ export const HomePage = () => {
     return date.toLocaleDateString("ru-RU", { weekday: "long" });
   };
 
+  const getWeatherIcon = (desc: string) => {
+    switch (desc) {
+      case "Clear":
+        return <SunIcon />;
+      case "Rain":
+        return <CloudRain />;
+      case "Snow":
+        return <CloudRain />;
+      case "Clouds":
+        return <CloudSun />;
+      case "Thunderstorm":
+        return <CloudSun />;
+    }
+  };
+
   useEffect(() => {
     if (debounceQuery) {
       fetchData();
     }
   }, [debounceQuery]);
 
+  useEffect(() => {
+    setData((prev) => ({
+      ...prev,
+      date: {
+        ...prev.date,
+        time: formattedDate,
+      },
+    }));
+  }, []);
+
+  console.log(data);
+
   return (
     <>
       <div className={styles.main}>
         <div className={styles.content}>
-          <div className={styles.content_info}>
+          <div className={`${styles.content_info} ${statuses.loading && styles.active}`}>
             <div className={styles.content_info_top}>
-              <h2>Вторник</h2>
-              <p>20 Jun 2022</p>
+              <h2>{data.date?.day?.split("")[0]?.toUpperCase() + data.date?.day?.split("").slice(1).join("")}</h2>
+              <p>{data.date?.time}</p>
               <div className={styles.content_info_location}>
                 <LocationIcon />
-                Biarritz, FR
+                {data.today.name}
               </div>
             </div>
             <div className={styles.content_info_bottom}>
-              <SunIcon />
-              <h2>29 °C</h2>
-              <p>Sunny</p>
+              {getWeatherIcon(data.today.weather[0].main)}
+              <h2>{Math.round(Number(data.today.main.temp))} °C</h2>
+              <p>
+                {data.today?.weather[0]?.description?.split("")[0]?.toUpperCase() +
+                  data.today?.weather[0]?.description?.split("").slice(1).join("")}
+              </p>
             </div>
           </div>
 
           <div className={styles.others_info}>
             <div className={styles.others_info_top}>
               <div className={styles.others_info_top_item}>
-                <h2>PRECIPITATION</h2>
-                <p>0%</p>
+                <h2>ВЛАЖНОСТЬ</h2>
+                <p>{data.today.main.humidity}%</p>
               </div>
               <div className={styles.others_info_top_item}>
-                <h2>HUMIDITY</h2>
-                <p>42%</p>
-              </div>
-              <div className={styles.others_info_top_item}>
-                <h2>WIND</h2>
-                <p>3 km/h</p>
+                <h2>ВЕТЕР</h2>
+                <p>{Math.round(Number(data.today.wind.speed))} км/ч</p>
               </div>
             </div>
 
-            <div className={styles.others_days}>
-              <div className={styles.others_days_item}>
-                <SunIcon />
-                <p>Tue</p>
-                <h2>30 °C</h2>
-              </div>
-              <div className={styles.others_days_item}>
-                <SunIcon />
-                <p>Wed</p>
-                <h2>30 °C</h2>
-              </div>
-              <div className={styles.others_days_item}>
-                <SunIcon />
-                <p>Thu</p>
-                <h2>30 °C</h2>
-              </div>
-              <div className={styles.others_days_item}>
-                <SunIcon />
-                <p>Fry</p>
-                <h2>30 °C</h2>
-              </div>
+            <div className={`${styles.others_days}`}>
+              {Array.isArray(data.weatherList) &&
+                data.weatherList.slice(1).map((item: any) => (
+                  <div className={styles.others_days_item} key={item.dt}>
+                    {getWeatherIcon(item.weather[0].main)}
+                    <p>{getDayOfWeek(item.dt).slice(0, 3)}</p>
+                    <h2>{Math.round(Number(item.main.temp))} °C</h2>
+                  </div>
+                ))}
             </div>
 
-            <label htmlFor="search" className={styles.search}>
+            <label htmlFor="search" className={`${styles.search} ${statuses.error && styles.active}`}>
               <input
                 type="text"
                 id="search"

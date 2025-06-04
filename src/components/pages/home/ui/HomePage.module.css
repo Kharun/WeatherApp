@@ -34,6 +34,21 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.content_info::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  opacity: 0;
+  border-radius: 30px;
+  transition: 0.1s linear;
+}
+.content_info.active::after {
+  opacity: 0.1;
+}
 .content_info_top {
   display: flex;
   flex-direction: column;
@@ -95,6 +110,7 @@
   background: #272e37;
   border-radius: 10px;
   justify-content: space-between;
+  position: relative;
 }
 .others_days_item {
   box-shadow: 1px 2px 4px 0 #222831;
@@ -130,6 +146,23 @@
   padding: 15px;
   background: linear-gradient(180deg, rgba(136, 235, 239, 0.9) 0%, rgba(83, 91, 230, 0.9) 100%);
   border-radius: 10px;
+  position: relative;
+}
+.search::after {
+  content: "Город не найден";
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: -30px;
+  font-size: 14px;
+  color: rgb(255, 94, 94);
+  opacity: 0;
+  transform: translateY(5px);
+  transition: 0.2s ease-in-out;
+}
+.search.active::after {
+  transform: translateY(0);
+  opacity: 1;
 }
 .search input {
   width: 100%;
