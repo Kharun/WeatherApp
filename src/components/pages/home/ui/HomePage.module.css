@@ -175,3 +175,70 @@
   color: #fff;
   font-weight: 500;
 }
+
+@media screen and (max-width: 1099px) {
+  .content {
+    gap: 10px;
+  }
+  .content_info {
+    left: 0;
+    max-width: 50%;
+  }
+  .others_info {
+    max-width: 50%;
+  }
+}
+@media screen and (max-width: 880px) {
+  .content {
+    flex-direction: column;
+    height: 100%;
+    max-height: 95vh;
+    margin: 30px;
+  }
+  .content_info,
+  .others_info {
+    max-width: unset;
+  }
+  .content_info {
+    max-height: calc(50% - 20px);
+    top: 0;
+    transform: unset;
+    border-radius: 20px;
+  }
+  .others_info {
+    height: 100%;
+    max-height: calc(50% - 20px);
+  }
+}
+@media screen and (max-width: 660px) {
+  .content {
+    padding: 20px;
+  }
+  .content_info h2 {
+    font-size: 24px;
+  }
+  .content_info p {
+    font-size: 18px;
+  }
+  .others_info_top_item h2 {
+    font-size: 18px;
+  }
+  .others_info_top_item p {
+    font-size: 18px;
+  }
+  .others_days_item h2 {
+    font-size: 16px;
+  }
+  .others_days_item p {
+    font-size: 14px;
+  }
+  .others_days_item {
+    padding: 10px;
+  }
+  .others_days_item svg {
+    width: 40px;
+  }
+  .content_info_bottom svg {
+    width: 40px;
+  }
+}
