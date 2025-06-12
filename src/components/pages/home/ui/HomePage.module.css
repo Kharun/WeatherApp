@@ -244,3 +244,8 @@
     width: 40px;
   }
 }
+@media screen and (max-height: 600px) {
+  .content_info {
+    flex-direction: unset;
+  }
+}
